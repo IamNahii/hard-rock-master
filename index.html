@@ -86,22 +86,32 @@
                         const artist = data[i].artist.name;
                         const title = data[i].title;
                         const show = document.createElement('p')
-                        show.innerHTML = `<p class="author lead"><strong>${title}</strong> Album by <span>${artist}</span> <button class="btn btn-success" onclick="showLyrics('${title}', '${artist}')")>Get Lyrics</button></p>`;
-                        const showList = document.getElementById('songs-list')
-                        showList.appendChild(show)
+                        show.innerHTML = `<p class="author lead"><strong>${title}</strong> Album by <span>${artist}</span> <button onclick="showLyrics('${title}', '${artist}')" class="btn btn-success")>Get Lyrics</button></p>`;
+                        const showList = document.getElementById('songs-list');
+                        showList.appendChild(show);
                         }
             })
         });
 
-        // function showLyrics(artist, title){
-        //     fetch(`https://api.lyrics.ovh/v1/${artist}/${title}`)
-        //     .then(res => res.json())
-        //     .then(data => {
-        //         const lyricsText = document.getElementById('show-lyrics');
-        //         lyricsText.innerHTML = `<h1 class="text-success mb-4"><span>${artist}</span> by <span>${title}</span></h1> ${data.lyrics}`;
-        //     })
-        //     .catch(error => console.log(error))
-        // }
+        function showLyrics(artist, title){
+                fetch(`https://api.lyrics.ovh/v1/${artist}/${title}`)
+                .then(res => res.json())
+                .then(data => {
+                    const lyricsText = document.getElementById('show-lyrics');
+                    const displayLyrics = `<button class="btn go-back">&lsaquo;</button>
+                        <h2 class="text-success mb-4">${title} - ${artist}</h2>
+                        <pre class="lyric text-white">${data.lyrics}</pre>`;
+
+                    const lyricsFailed = `<h2 class="text-danger mb-4">${data.error}</h2>`;
+                    if(data.error){
+                        lyricsText.innerHTML = lyricsFailed;
+                    }
+                    else{
+                        lyricsText.innerHTML = displayLyrics;
+                    }
+                })
+                .catch(error => console.log(error))
+        }
     </script>
 
 </body>
